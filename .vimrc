@@ -126,9 +126,12 @@ au FileType unite imap <silent> <buffer> <ESC><ESC> <ESC>q
 "*** [end] ***
 
 "*** [start] neocomplcache.vim ***
-highlight Pmenu ctermbg=4
-highlight PmenuSel ctermbg=1
-highlight PMenuSbar ctermbg=4
+"highlight Pmenu ctermbg=4
+"highlight PmenuSel ctermbg=1
+"highlight PMenuSbar ctermbg=4
+highlight Pmenu ctermbg=8
+highlight PmenuSel ctermbg=Green
+highlight PmenuSbar ctermbg=Green
 " 補完ウィンドウの設定
 set completeopt=menuone
 " 補完ウィンドウの設定
