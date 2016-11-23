@@ -81,10 +81,15 @@ let g:rsenseUseOmniFunc = 1
 " -------------------------
 " neocomplete.vim
 " -------------------------
-let g:acp_enableAtStartup = 0             " AutoComplPopを無効にする
-let g:neocomplete#enable_at_startup = 1   " neocompleteを有効にする
-let g:neocomplete#enable_smart_case = 1   " smarrt case有効化。 大文字が入力されるまで大文字小文字の区別を無視する
-let g:neocomplete#enable_auto_select = 1  " 補完候補の一番先頭を選択状態にする(AutoComplPopと似た動作)
+let g:acp_enableAtStartup = 0                                 " AutoComplPopを無効にする
+let g:neocomplete#enable_at_startup = 1                       " neocompleteを有効にする
+let g:neocomplete#enable_smart_case = 1                       " smarrt case有効化。 大文字が入力されるまで大文字小文字の区別を無視する
+let g:neocomplete#enable_auto_select = 1                      " 補完候補の一番先頭を選択状態にする(AutoComplPopと似た動作)
+let g:neocomplete#min_keyword_length = 3                      " 3文字以上の単語に対して補完を有効にする
+let g:neocomplete#enable_auto_delimiter = 1                   " 区切り文字まで補完する
+let g:neocomplete#auto_completion_start_length = 2            " 2文字目の入力から補完のポップアップを表示
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"      " 補完候補をTABで選択（進む）
+inoremap <expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<S-TAB>"  " 補完候補をTABで選択（戻る）
 if !exists('g:neocomplete#force_omni_input_patterns')
   let g:neocomplete#force_omni_input_patterns = {}
 endif
@@ -160,9 +165,36 @@ filetype plugin indent on
 " vim-rails用のキーバインディング
 call altercmd#load() " コマンド設定より前に書く
 autocmd User Rails AlterCommand s S
-autocmd User Rails AlterCommand sc Scontroller
-autocmd User Rails AlterCommand sm Smodel
-autocmd User Rails AlterCommand sv Sview
+autocmd User Rails AlterCommand sc Scontroller  " 画面を横分割して関連するcontrollerファイルを開く
+autocmd User Rails AlterCommand sm Smodel       " 画面を横分割して関連するmodelファイルを開く
+autocmd User Rails AlterCommand sv Sview        " 画面を横分割して関連するviewファイルを開く
+autocmd User Rails AlterCommand v V
+autocmd User Rails AlterCommand vc Vcontroller  " 画面を縦分割して関連するcontrollerファイルを開く
+autocmd User Rails AlterCommand vm Vmodel       " 画面を縦分割して関連するmodelファイルを開く
+autocmd User Rails AlterCommand vv Vview        " 画面を縦分割して関連するviewファイルを開く
 "==========================
 " End Base Settings.
 "==========================
+
+"---------------------------------------------------
+" クリップボードからペーストする時だけインデントしないようにする
+"---------------------------------------------------
+if &term =~ "xterm"
+  let &t_SI .= "\e[?2004h"
+  let &t_EI .= "\e[?2004l"
+  let &pastetoggle = "\e[201~"
+
+  function XTermPasteBegin(ret)
+    set paste
+    return a:ret
+  endfunction
+
+  inoremap <special> <expr> <Esc>[200~ XTermPasteBegin("")
+endif
+
+"---------------------------------------------------
+" 前回のカーソル位置を復元
+"---------------------------------------------------
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
+endif
