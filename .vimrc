@@ -123,9 +123,6 @@ set encoding=utf-8            " vim内部で使われる文字エンコーディ
 set fileformats=unix,dos,mac  " 想定される改行コードの指定する
 syntax enable                 " ハイライトを有効化する
 
-inoremap <silent> jj <ESC>    " jjでエスケープ
-cnoremap tree NERDTree        " NERDTree を開く
-
 " 画面表示の設定
 set number                    " 行番号を表示する
 set cursorline                " カーソル行にラインを表示する
@@ -156,6 +153,9 @@ set autoindent                " 新しい行を開始したとき、新しい行
 " Rails viewタグ挿入
 inoremap <C-p> <lt>%=  %><Left><Left><Left>
 inoremap <C-e> <lt>% end %>
+
+inoremap <silent> jj <ESC><Left>  " jjでエスケープ
+cnoremap tree NERDTree            " NERDTree を開く
 
 " ファイル形式の検出の有効化する
 " ファイル形式別プラグインのロードを有効化する
